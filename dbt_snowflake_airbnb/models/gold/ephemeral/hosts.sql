@@ -1,0 +1,11 @@
+{{config(materialized='ephemeral')}}
+
+WITH HOSTS AS(
+    SELECT DISTINCT HOST_ID,
+           HOST_NAME,
+           HOST_SINCE,
+           IS_SUPERHOST,
+           RESPONSE_QUALITY,
+           HOST_CREATED_AT FROM {{ref('obt')}}
+)
+SELECT * FROM HOSTS

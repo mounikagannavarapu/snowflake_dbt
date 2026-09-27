@@ -1,0 +1,13 @@
+dbt_snowflake_airbnb:
+  outputs:
+    dev:
+      account: TSOINWX-PJ04147
+      database: AIRBNB_DBT
+      password: Ammamouni*2698
+      role: ACCOUNTADMIN
+      schema: dbt_schema
+      threads: 1
+      type: snowflake
+      user: MOUNI2698
+      warehouse: COMPUTE_WH
+  target: dev

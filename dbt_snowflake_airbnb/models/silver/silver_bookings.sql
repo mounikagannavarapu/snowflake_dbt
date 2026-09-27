@@ -1,0 +1,10 @@
+{{config(materialized='incremental',unique_key='booking_id')}}
+
+SELECT BOOKING_ID,LISTING_ID,BOOKING_DATE,
+{{multiply_macro('NIGHTS_BOOKED','BOOKING_AMOUNT',2)}} AS BOOKING_FEE,
+CLEANING_FEE,
+SERVICE_FEE,
+BOOKING_STATUS,
+CREATED_AT
+FROM {{ref("bronze_bookings")}}
+

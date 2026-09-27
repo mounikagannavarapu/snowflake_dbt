@@ -1,0 +1,26 @@
+{% set configs =[
+    {"table":"AIRBNB_DBT.SILVER.silver_BOOKINGS",
+    "columns":"silver_BOOKINGS.*",
+    "alias": "silver_bookings"},
+
+    {"table":"AIRBNB_DBT.SILVER.SILVER_LISTINGS",
+    "columns":"silver_listings.PROPERTY_TYPE,silver_listings.COUNTRY,silver_listings.CITY,silver_listings.ACCOMMODATES,silver_listings.BEDROOMS,silver_listings.BATHROOMS,silver_listings.PRICE_PER_NIGHT,silver_listings.PRICE_TAG,silver_listings.CREATED_AT AS LISTING_cREATED_AT",
+    "alias": "silver_listings",
+    "join_condition":"silver_bookings.listing_id=silver_listings.listing_id"},
+
+    {"table":"AIRBNB_DBT.SILVER.silver_HOSTS",
+    "columns":"silver_hosts.HOST_ID,silver_hosts.HOST_NAME,silver_hosts.HOST_SINCE,silver_hosts.IS_SUPERHOST,silver_hosts.RESPONSE_RATE,silver_hosts.response_quality,silver_hosts.CREATED_AT AS HOST_CREATED_AT",
+    "alias": "silver_hosts",
+    "join_condition":"silver_listings.host_id=silver_hosts.host_id"}
+]%}
+
+SELECT {% for config in configs %}
+   {{config['columns']}}{% if not loop.last %},{% endif %}
+{% endfor %}
+FROM {% for config in configs %}
+       {% if loop.first %}
+        {{config['table']}}  AS  {{config['alias']}}
+       {% else %}
+        LEFT JOIN {{config['table']}} AS {{config['alias']}} ON {{config['join_condition']}}
+       {% endif %}
+     {%endfor%}
